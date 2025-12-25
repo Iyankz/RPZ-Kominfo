@@ -26,7 +26,24 @@ Jalankan perintah berikut di terminal server Anda untuk memulai instalasi otomat
 sudo curl -Ssl https://raw.githubusercontent.com/Iyankz/RPZ-Kominfo/refs/heads/main/bind9-rpz.sh | sudo bash
 ```
 
-## Jika ingin merubah IP mana saja yang di Allow reqest DNS bisa edit file named.conf.optins pada bagian 0.0.0.0/0 (Secara Default Semua IP di allow)
+## 🛠️ Konfigurasi Keamanan (Penting)
+Secara default, skrip ini mengonfigurasi Bind9 untuk menerima request dari semua IP (0.0.0.0/0). Untuk keamanan, sangat disarankan membatasi akses DNS hanya untuk jaringan internal Anda. Ganti bagian allow-query dan ganti 0.0.0.0/0 menjadi IP/jaringan spesifik Anda.:
+Buka file konfigurasi:
 ```bash
-    sudo nano /etc/bind/named.conf.options
-    sudo systemctl restart bind9
+sudo nano /etc/bind/named.conf.options
+sudo systemctl restart bind9
+```
+## 📂 Struktur & Lokasi File
+Konfigurasi Utama: /etc/bind/named.conf.options
+Definisi Zona: /etc/bind/named.conf.default-zones
+Skrip Sinkronisasi: /usr/local/bin/sync-rpz.sh
+Log Aktivitas: /var/log/rpz-sync.log
+
+## 📊 Monitoring & Verifikasi
+Pantau proses sinkronisasi database RPZ melalui log:
+```bash
+tail -f /var/log/rpz-sync.log
+```
+Cek status transfer zona:
+```bash
+rndc showzone trustpositifkominfo
