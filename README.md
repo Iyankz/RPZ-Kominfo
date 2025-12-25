@@ -47,3 +47,6 @@ tail -f /var/log/rpz-sync.log
 Cek status transfer zona:
 ```bash
 rndc showzone trustpositifkominfo
+```
+## ⚖️ Lisensi
+Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detailnya.
