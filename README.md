@@ -48,6 +48,8 @@ Cek status transfer zona:
 ```bash
 rndc showzone trustpositifkominfo
 ```
+----
+
 ## Dibuat dengan ❤️ oleh [Iyankz](https://github.com/Iyankz) & [Gemini AI](https://gemini.google.com/)
 
 * **Iyankz** (Lead Developer)
