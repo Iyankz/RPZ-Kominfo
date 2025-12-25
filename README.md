@@ -1,15 +1,32 @@
-# RPZ-Kominfo
+# 🛡️ Auto-Sync DNS RPZ Komdigi (Bind9)
 
-Sync RPZ Kominfo
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![OS: Ubuntu](https://img.shields.io/badge/Recommended%20OS-Ubuntu%2022.04%20%7C%2024.04-orange.svg)](https://ubuntu.com/)
+[![OS: Debian](https://img.shields.io/badge/Recommended%20OS-Debian%2012%20%7C%2013-red.svg)](https://www.debian.org/)
 
-1. Lakukan pengisian form data pada link berikut http://bit.ly/FormKoneksiRPZ agar di allow kominfo.
-2. Install Debian12 (BookWorm) / Ubuntu 22.04 (jammy Jellyfish)
-3. Copy Paste Kode di bawah 
-##
-    sudo curl -Ssl https://raw.githubusercontent.com/Iyankz/RPZ-Kominfo/refs/heads/main/bind9-rpz.sh | sudo bash
+Skrip otomatis untuk mengintegrasikan database pemblokiran konten negatif (**Response Policy Zone**) dari Komdigi (dahulu Kominfo) ke dalam server DNS Bind9 secara otomatis dan *real-time*.
 
-4. Jika ingin merubah IP mana saja yang di Allow reqest DNS bisa edit file named.conf.optins pada bagian 0.0.0.0/0 (Secara Default Semua IP di allow)
-##
+---
+
+## 🖥️ Kompatibilitas Sistem Operasi
+Skrip ini telah diuji secara intensif dan dioptimalkan untuk:
+
+| Distribusi | Versi yang Didukung |
+| :--- | :--- |
+| **Debian** | 12 (Bookworm), 13 (Trixie) |
+| **Ubuntu** | 22.04 LTS (Jammy), 24.04 LTS (Noble) |
+
+---
+
+## 🚀 Cara Penggunaan
+
+Jalankan perintah berikut di terminal server Anda untuk memulai instalasi otomatis:
+
+```bash
+sudo curl -Ssl https://raw.githubusercontent.com/Iyankz/RPZ-Kominfo/refs/heads/main/bind9-rpz.sh | sudo bash
+```
+
+## Jika ingin merubah IP mana saja yang di Allow reqest DNS bisa edit file named.conf.optins pada bagian 0.0.0.0/0 (Secara Default Semua IP di allow)
+```bash
     sudo nano /etc/bind/named.conf.options
-##
     sudo systemctl restart bind9
