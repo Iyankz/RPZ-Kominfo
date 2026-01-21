@@ -124,6 +124,13 @@ sudo systemctl restart bind9
 | Skrip sinkronisasi      | `/usr/local/bin/sync-rpz.sh`         |
 | Log aktivitas           | `/var/log/rpz-sync.log`              |
 
+## 🚀 Cara Update Database (One-Line Command)
+
+Jalankan perintah berikut di server DNS Anda:
+```bash
+sudo curl -sSl http://github.com/Iyankz/RPZ-Kominfo/blob/main/update.sh | sudo bash
+```
+
 ## 📊 Monitoring & Verifikasi
 ### 🔍 Monitoring Log Sinkronisasi
 ```bash
@@ -143,8 +150,11 @@ Jika zona terdaftar dan berstatus loaded, maka RPZ telah aktif.
 * Gunakan server sekunder (slave) untuk redundansi
 
 ## 👨‍💻 Pengembang
+
 Dikembangkan dan dipelihara oleh:
-[Iyankz](Iyankz.github.io)
+
+- **Iyankz**  
+  🌐 https://iyankz.github.io
 
 
 ## ⚖️ Lisensi
