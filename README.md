@@ -1,63 +1,158 @@
-# 🛡️ Auto-Sync DNS RPZ Komdigi (Bind9)
+<div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![OS: Ubuntu](https://img.shields.io/badge/Recommended%20OS-Ubuntu%2022.04%20%7C%2024.04-orange.svg)](https://ubuntu.com/)
-[![OS: Debian](https://img.shields.io/badge/Recommended%20OS-Debian%2012%20%7C%2013-red.svg)](https://www.debian.org/)
+# 🛡️ Auto-Sync DNS RPZ Komdigi
+### Bind9 – Real-Time Response Policy Zone
 
-Skrip otomatis untuk mengintegrasikan database pemblokiran konten negatif (**Response Policy Zone**) dari Komdigi (dahulu Kominfo) ke dalam server DNS Bind9 secara otomatis dan *real-time*.
+Integrasi otomatis **Database Pemblokiran Konten Negatif (RPZ)**  
+dari **Komdigi (sebelumnya Kominfo)** ke **DNS Server Bind9**  
+dengan mekanisme **sinkronisasi real-time & terjadwal**.
+
+<br/>
+
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%20%7C%2024.04-E95420?logo=ubuntu&logoColor=white)
+![Debian](https://img.shields.io/badge/Debian-12%20%7C%2013-A81D33?logo=debian&logoColor=white)
+![Bind9](https://img.shields.io/badge/DNS-Bind9-blue)
+
+</div>
+
+---
+
+## 📌 Tentang Proyek
+
+**Auto-Sync DNS RPZ Komdigi** adalah skrip otomatis untuk mengintegrasikan  
+**Response Policy Zone (RPZ)** dari Komdigi langsung ke **Bind9 DNS Server**.
+
+Proyek ini ditujukan untuk:
+- ISP / NAP
+- NOC & SOC
+- Enterprise Network
+- Data Center & Private DNS Resolver
+
+Tujuan utama proyek ini adalah:
+> **Menyederhanakan implementasi DNS filtering nasional secara aman, konsisten, dan mudah dipelihara.**
+
+---
+
+## ✨ Fitur Utama
+
+- ✅ Sinkronisasi otomatis database RPZ Komdigi
+- ✅ Integrasi native dengan **Bind9**
+- ✅ Update real-time & terjadwal
+- ✅ Logging terpusat & mudah dipantau
+- ✅ Minim intervensi manual
+- ✅ Siap digunakan di lingkungan produksi
 
 ---
 
 ## 🖥️ Kompatibilitas Sistem Operasi
-Skrip ini telah diuji secara intensif dan dioptimalkan untuk:
 
-| Distribusi | Versi yang Didukung |
-| :--- | :--- |
+Skrip ini telah diuji dan dioptimalkan pada sistem berikut:
+
+| Distribusi | Versi |
+|-----------|-------|
 | **Debian** | 12 (Bookworm), 13 (Trixie) |
 | **Ubuntu** | 22.04 LTS (Jammy), 24.04 LTS (Noble) |
 
+> Distribusi lain berbasis Debian kemungkinan kompatibel, namun belum diuji secara resmi.
+
 ---
 
-## 🚀 Cara Penggunaan
+## ⚙️ Kebutuhan Sistem
 
-Jalankan perintah berikut di terminal server Anda untuk memulai instalasi otomatis:
+- Bind9
+- Curl
+- Akses Internet
+- Hak akses **root**
+
+---
+
+## 📝 Persyaratan Akses RPZ Komdigi (WAJIB)
+
+Sebelum menggunakan skrip ini, **Anda wajib mendaftarkan server DNS Anda ke Komdigi**  
+agar IP server di-*allow* untuk mengakses database RPZ.
+
+### 🔗 Langkah Pendaftaran:
+1. Buka tautan berikut:  
+   👉 **http://bit.ly/FormKoneksiRPZ**
+2. Isi seluruh form data dengan benar dan lengkap
+3. Tunggu proses persetujuan dari Komdigi
+4. Setelah IP dinyatakan *allow*, sinkronisasi RPZ dapat berjalan
+
+⚠️ **Tanpa proses pendaftaran ini, server tidak akan dapat mengunduh data RPZ.**
+
+---
+
+## 🚀 Instalasi Cepat (One-Line Installer)
+
+Jalankan perintah berikut di server DNS Anda:
 
 ```bash
-sudo curl -Ssl https://raw.githubusercontent.com/Iyankz/RPZ-Kominfo/refs/heads/main/bind9-rpz.sh | sudo bash
+sudo curl -sSl https://raw.githubusercontent.com/Iyankz/RPZ-Kominfo/main/bind9-rpz.sh | sudo bash
 ```
 
-## 🛠️ Konfigurasi Keamanan (Penting)
-Secara default, skrip ini mengonfigurasi Bind9 untuk menerima request dari semua IP (0.0.0.0/0). Untuk keamanan, sangat disarankan membatasi akses DNS hanya untuk jaringan internal Anda. Ganti bagian allow-query dan ganti 0.0.0.0/0 menjadi IP/jaringan spesifik Anda.:
-Buka file konfigurasi:
+## 📌 Catatan:
+
+* Skrip akan mengonfigurasi RPZ secara otomatis
+* Sinkronisasi awal akan langsung dijalankan
+* Cron job akan dibuat untuk update berkala
+
+## 🔐 Konfigurasi Keamanan (PENTING)
+Secara default, konfigurasi Bind9 mengizinkan query dari semua IP:
+```
+0.0.0.0/0
+```
+
+## ⚠️ Konfigurasi ini tidak disarankan untuk penggunaan produksi.
+
+Rekomendasi:
+Batasi akses DNS hanya ke jaringan internal atau subnet tertentu.
+
+Langkah Konfigurasi:
 ```bash
 sudo nano /etc/bind/named.conf.options
+```
+Sesuaikan parameter allow-query, lalu restart Bind9:
+```bash
 sudo systemctl restart bind9
 ```
 ## 📂 Struktur & Lokasi File
-Konfigurasi Utama: /etc/bind/named.conf.options
-Definisi Zona: /etc/bind/named.conf.default-zones
-Skrip Sinkronisasi: /usr/local/bin/sync-rpz.sh
-Log Aktivitas: /var/log/rpz-sync.log
+| Komponen                | Lokasi                               |
+| ----------------------- | ------------------------------------ |
+| Konfigurasi utama Bind9 | `/etc/bind/named.conf.options`       |
+| Definisi zona RPZ       | `/etc/bind/named.conf.default-zones` |
+| Skrip sinkronisasi      | `/usr/local/bin/sync-rpz.sh`         |
+| Log aktivitas           | `/var/log/rpz-sync.log`              |
 
 ## 📊 Monitoring & Verifikasi
-Pantau proses sinkronisasi database RPZ melalui log:
+### 🔍 Monitoring Log Sinkronisasi
 ```bash
 tail -f /var/log/rpz-sync.log
 ```
-Cek status transfer zona:
+## 📡 Verifikasi Status Zona RPZ
 ```bash
 rndc showzone trustpositifkominfo
 ```
-----
+Jika zona terdaftar dan berstatus loaded, maka RPZ telah aktif.
 
+## 🧪 Best Practice Produksi
+* Gunakan internal DNS resolver
+* Terapkan ACL pada Bind9
+* Monitoring log secara berkala
+* Backup konfigurasi sebelum update besar
+* Gunakan server sekunder (slave) untuk redundansi
 
-## Dibuat dengan ❤️ oleh [Iyankz](https://github.com/Iyankz) & [Gemini AI](https://gemini.google.com/)
+## 👨‍💻 Pengembang
+Dikembangkan dan dipelihara oleh:
+[Iyankz](Iyankz.github.io)
 
-* **Iyankz** (Inisiator , Developer & Tester)
-* **Gemini** (AI Partner & Technical Assistant)
 
 ## ⚖️ Lisensi
-Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detailnya.
+Proyek ini dilisensikan di bawah MIT License.
+Silakan lihat file LICENSE untuk detail lengkap.
 
-## ⭐ Dukung Proyek Ini
-Jika repositori ini membantu memudahkan pekerjaan Anda atau bermanfaat bagi tim IT Anda, mohon berikan bintang (Star) ⭐ pada repositori ini sebagai bentuk dukungan bagi kami untuk terus mengembangkan script ini.
+## ⭐ Dukungan & Apresiasi
+Jika proyek ini membantu pekerjaan Anda atau organisasi Anda:
+
+## 👉 Berikan Star ⭐ pada repository ini
+Dukungan Anda sangat berarti untuk pengembangan lanjutan.
